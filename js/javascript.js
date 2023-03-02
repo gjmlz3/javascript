@@ -4,90 +4,34 @@ function total_cantidad(gramos_ingrediente, personas) {
 
     gramos_ingrediente = parseInt(gramos_ingrediente);
     personas = parseInt(personas);
-
-
-
     let total_cantidad = gramos_ingrediente * personas;
-
     if (total_cantidad > 0) {
-
         return total_cantidad
-    }
-
-    else {
-        return console.log("No se puede cocinar para 0 personas");
     }
 }
 
-let nombre_usuario = prompt("ingrese nombre usuario");
 
-if (nombre_usuario) {
-    alert(`Hola ${nombre_usuario}, bienvenido al sistema de recetas de Hoy Cocino Yo`);
-    let opciones_usuario = prompt("Que herramientas desea utilizar? Ingrese 1 para ver nuestras recetas o Ingrese 2 para el calculador de recetas");
 
-    if (opciones_usuario == 1) {
+//el usuario entra al sitio y pide el nombre para luego mostrarselo en pantalla
+function entrar() {
+    let nombre_usuario = document.getElementById("nombre").value;
+    if (nombre_usuario != null && nombre_usuario != "") {
+        localStorage.setItem("nombre", nombre_usuario);
+    }
+    if (nombre_usuario) {
+        // declaracion de recetas una vez que el usuario ingresa su nombre  
         class receta {
             constructor(nombre, ingredientes, procedimiento) {
                 this.nombre = nombre;
                 this.ingredientes = ingredientes;
                 this.procedimiento = procedimiento;
             }
-
-            get_receta() {
-                console.log("--------------------------");
-                console.log("Nombre:", this.nombre);
-                console.log("Ingredientes:", this.ingredientes);
-                console.log("Procedimiento:", this.procedimiento);
-            }
-        }
-        //funcion para calcular recetas, luego multiplicarlas por la cantidad de personas
-        function calcular_recetas() {
-            let mostrar_receta = prompt("Que receta desea hacer? Guiso de lentejas, Pastel de papas o Ensalada?");
-            //Formatea la receta a todas mayusculas y borra los espacios
-            let receta_formateada = mostrar_receta.toUpperCase().trim();
-            let resultado = lista_recetas.find((receta) => {
-                if (receta.nombre.toUpperCase() === receta_formateada) {
-                    return receta;
-                }
-            });
-
-            if (resultado) {
-                cantidad_personas = prompt("Para cuantas personas desea cocinar");
-                if (cantidad_personas) {
-                    if (cantidad_personas != 0) {
-                        ingredientes = resultado.ingredientes;
-                        console.log("Total de ingredientes a Utilizar: ");
-                        let claves = Object.keys(ingredientes);
-                        //For dentro de for para llegar a las cantidades de los ingredientes para poder utilizarlos
-                        for (let i = 0; i < claves.length; i++) {
-                            let ingrediente = ingredientes[claves[i]];
-                            let clave_ingrediente = Object.keys(ingrediente);
-                            console.log(`----------${claves[i]} -------------`);
-                            //muestra ingredientes totales segun personas
-                            for (let i = 0; i < clave_ingrediente.length; i++) {
-                                console.log(
-                                    `${clave_ingrediente[i]} : ${ingrediente[clave_ingrediente[i]] * cantidad_personas
-                                    }`
-                                );
-                                
-                            }
-                            //Muestra procedimiento receta
-                            console.log(resultado.procedimiento);
-                        }
-                    } else { console.log("Usted ha ingresado un valor incorrecto") };
-                } else {
-                    console.log("Usted no ha ingresado ningun valor");
-                }
-            } else {
-                console.log("La receta ingresada no es correcta");
-            }
         }
 
-        //Recetas almacenadas en el sistema
         let lista_recetas = [];
 
         let guiso = new receta(
-            "Guiso de lentejas",
+            "guiso",
             (ingredientes = {
 
 
@@ -115,7 +59,7 @@ if (nombre_usuario) {
         )
         lista_recetas.push(guiso);
         let pastel = new receta(
-            "Pastel de papas",
+            "pastel",
             (ingredientes = {
 
 
@@ -145,7 +89,7 @@ if (nombre_usuario) {
         lista_recetas.push(pastel);
 
         let ensalada = new receta(
-            "Ensalada",
+            "ensalada",
             (ingredientes = {
 
 
@@ -165,36 +109,212 @@ if (nombre_usuario) {
             procedimiento = ["Limpiar todos los vegetales", "Cortar las hojas verdes", "Cortar los cherry", "Hervir el pollo con sal", "Cortar la palta en cubos", "cortar el huevo en octavos"]
         );
         lista_recetas.push(ensalada);
-        calcular_recetas();
-    }
-    if (opciones_usuario == 2) {
-        let nombre_receta = prompt("Ingrese nombre receta");
-        let personas = prompt("Ingrese CANTIDAD de PERSONAS, en numeros");
-        personas = parseInt(personas);
-        let cantidad_ingredientes = prompt("Ingrese CANTIDAD de INGREDIENTES en numero");
-        cantidad_ingredientes = parseInt(cantidad_ingredientes);
+        //se almacena el usuario en el localStorage y luego se recupera para mostrarlo en pantalla
+        let nombre_usuario_almacenado = localStorage.getItem("nombre")
+        //primer render del html
+        document.body.innerHTML = `
+        <h1>Bienvenido/a al sistema ${nombre_usuario_almacenado}</h1>   
+        <div>
+          <h2>Que herramienta desea utilizar?</h2>
+          <select name="" id="select">
+            <option value=""></option>
+            <option value="1">Nuestras Recetas</option>
+            <option value="2">Calculador de recetas</option>
+          </select>
+        </div>
+        <a href="index.html">Volver</a>
+      `;
+        //se almacena la opcion elegida por el usuario para luego tomar deciciones
+        let opciones_usuario = document.getElementById("select");
 
-        if (personas, cantidad_ingredientes && nombre_receta != "") {
-            console.log("Ud va a preparar", nombre_receta);
-            //El for va a dar las vueltas segun la cantidad de ingredientes que ingrese el usuario
-            for (let vuelta = 0; vuelta < cantidad_ingredientes; vuelta++) {
-                let nombre_ingrediente = prompt("Ingrese NOMBRE ingrediente");
-                let gramos_ingrediente = prompt("Ingrese CANTIDAD en GRAMOS para una porcion");
-                let total_gramos = total_cantidad(gramos_ingrediente, personas);
-                console.log("Ud necesita", total_gramos, " gramos, de ", nombre_ingrediente);
+        opciones_usuario.addEventListener("change", function (e) {
+            if (e.target.value == 1) {
+                //segundo render del html preguntando que desea cocinar, aparecen 3 input radio y se almacena mediante el target
+                document.body.innerHTML = `
+                <div class="logo">
+                  <img src="./assets/images/LogoNegro.png" alt="logo" width="100" height="100">
+                </div>
+                <div class="titulo">
+                  <h1>¿Qué desea cocinar?</h1>
+                </div>
+                <div class="recetas">
+                  <label>Elija una opción:</label><br>
+                  <input type="radio" name="opcion_unica" value="guiso" >Guiso de lentejas<br>
+                  <input type="radio" name="opcion_unica" value="pastel">Pastel de papa<br>
+                  <input type="radio" name="opcion_unica" value="ensalada">Ensalada<br><br>
+                  <label for="">¿Para cuántas personas desea cocinar?</label>
+                  <input type="text" name="" id="cantidad">
+                  <button id="btn_receta">Tengo Hambre</button>
+                </div>
+              `;
+                // se captura el boton receta y la opcion elegida
+                let btn_receta = document.getElementById('btn_receta');
+                btn_receta.addEventListener('click', function () {
+                    let opciones = document.getElementsByName("opcion_unica")
+
+
+                    let receta_seleccionada = '';
+
+                    // Recorremos los radio buttons para encontrar el seleccionado
+                    for (let i = 0; i < opciones.length; i++) {
+                        if (opciones[i].checked) {
+                            receta_seleccionada = opciones[i].value;
+                            break;
+                        }
+                    }
+
+
+                    //filtramos la receta para poder obtener los ingredientes
+                    let resultado = lista_recetas.filter((receta) => {
+                        if (receta.nombre.toString() === receta_seleccionada.toString()) {
+                            return receta;
+
+                        }
+
+                    })
+                    //desestruturacion
+                    const { nombre, ingredientes, procedimiento } = resultado[0];
+
+                    // se captura la cantidad de personas para poder multiplicar por la cantidad de ingredientes
+                    let cantidad_personas = document.getElementById('cantidad').value;
+                    if (!isNaN(cantidad_personas) && cantidad_personas !== '' && cantidad_personas !== '0') {
+                        cantidad_personas = parseInt(cantidad_personas);
+                       //ocultamos el resultado anterior para que no se acumulen en pantalla
+                        let resultado_anterior = document.querySelector('.resultado');
+                        if (resultado_anterior) {
+                            resultado_anterior.remove();
+                        }
+                        // si se cumplen las condiciones anteriores creamos una tabla con ingredientes y cantidad ingredientes
+
+                        if (cantidad_personas) {
+                            let receta_mostrar = document.createElement('div');
+                            receta_mostrar.classList.add('resultado');
+                            let tabla = document.createElement('table');
+                            let encabezado_tabla = `
+                                <tr>
+                                    <th>Ingredientes</th>
+                                    <th>Cantidad en gr</th>
+                                </tr>
+                            `;
+                            tabla.innerHTML = encabezado_tabla;
+                            //almacenamos en la variable claves los ingredientes para poder usarlos
+                            let claves = Object.keys(ingredientes);
+                            for (let i = 0; i < claves.length; i++) {
+                                let ingrediente = ingredientes[claves[i]];
+                                let clave_ingrediente = Object.keys(ingrediente);
+                                //por cada vuelta del for se crea una fila y columna de los ingredientes de la receta
+                                for (let j = 0; j < clave_ingrediente.length; j++) {
+                                    let cantidad = ingrediente[clave_ingrediente[j]] * cantidad_personas;
+                                    let fila = `
+                                        <tr>
+                                            <td>${clave_ingrediente[j]}</td>
+                                            <td>${cantidad}</td>
+                                        </tr>
+                                    `;
+                                    tabla.innerHTML += fila;
+                                }
+                            }
+                            //creamos un parrafo
+                            let procedimiento_parrafo = document.createElement('p');
+                            procedimiento_parrafo.innerText = procedimiento;
+                            // lo agregamos al html   
+                            receta_mostrar.appendChild(tabla);
+                            receta_mostrar.appendChild(procedimiento_parrafo);
+
+                            document.body.appendChild(receta_mostrar);
+
+                        }
+                        // si no se cumple alguna condicion anterior, enviamos un alert, me parecio la mejor manera de avisarle al usuario
+                    } else {
+                        alert('Valor incorrecto');
+
+                    }
+                });
             }
+            if (e.target.value == 2) {
+                // Aqui arranca el calculador de recetas
+                //tercer render del html
+                document.body.innerHTML = `<div class="logo">
+                <img src="./assets/images/LogoNegro.png" alt="logo" width="100" height="100">
+              </div>
+                <div class="calculador">
+                <label>Complete todos los campos</label><br>
+                <label for="">Ingrese nombre receta</label>
+                <input type="text" id="nombre_receta"><br>
+                <label for="">Ingrese cantidad personas</label>
+                <input type="number" id="personas"><br>
+                <label for="">Ingrese cantidad ingredientes</label>
+                <input type="number" id="cantidad_ingredientes"><br>
+                <button id="btn_ingredientes">Ingresar Ingredientes</button><br><br><br>
+              </div>
+              <br><br><br>
+              `;
+                let btn_ingredientes = document.getElementById('btn_ingredientes');
 
-        }
-        //si no ingresa todos los datos el programa no continua
-        else {
-            console.log("No ingreso todos los datos solicitados");
-        }
+                btn_ingredientes.addEventListener('click', () => {
+
+                    let nombre_receta = document.getElementById('nombre_receta').value;
+                    let personas = document.getElementById('personas').value;
+                    let cantidad_ingredientes = document.getElementById('cantidad_ingredientes').value;
+
+
+                    if (personas && cantidad_ingredientes && nombre_receta != "") {
+
+                        let inputsHtml = '';
+
+                        //El for va a dar las vueltas según la cantidad de ingredientes que ingrese el usuario y crear los input necesarios
+                        for (let vuelta = 0; vuelta < cantidad_ingredientes; vuelta++) {
+                            inputsHtml += `<label for="">Ingrese NOMBRE ingrediente:</label><br>
+                            <input type="text" id="ingrediente${vuelta + 1}_nombre"><br>
+                            <label for="">Ingrese CANTIDAD en GRAMOS para una porción:</label><br>
+                            <input type="number" id="ingrediente${vuelta + 1}_cantidad"><br>`;
+                        }
+                        inputsHtml += `<button id="btn_calcular"> Calcular</button><br><br><br>`
+                        // Agregamos los inputs generados al HTML
+                        document.querySelector('.calculador').innerHTML += inputsHtml;
+
+                        // Escuchamos el evento click del botón calcular
+                        let btn_calcular = document.getElementById('btn_calcular');
+                        btn_calcular.addEventListener('click', () => {
+
+                            const resultados = document.createElement('div');
+                            document.body.appendChild(resultados);
+                            // Obtenemos los valores de los ingredientes ingresados
+
+                            for (let vuelta = 0; vuelta < cantidad_ingredientes; vuelta++) {
+                                let nombre_ingrediente = document.getElementById(`ingrediente${vuelta + 1}_nombre`).value;
+                                let gramos_ingrediente = document.getElementById(`ingrediente${vuelta + 1}_cantidad`).value;
+                                let total_gramos = total_cantidad(gramos_ingrediente, personas);
+                                // Creamos un elemento para mostrar el resultado del ingrediente actual
+                                let resultado_ingrediente = document.createElement('p');
+                                resultado_ingrediente.textContent = `Ud necesita ${total_gramos} gramos de ${nombre_ingrediente}`;
+                                resultados.appendChild(resultado_ingrediente);
+                            }
+
+
+                        });
+
+                    }
+                    //un alert para avisarle que no completo todos los datos
+                    else { alert("No ingreso todos los datos solicitados") }
+
+                });
 
 
 
+                //aca termina el codigo de la funcion (nota mental)
+            }
+        });
+        ;
     }
- 
 }
+
+
+let btn_usuario = document.getElementById("btn_usuario");
+btn_usuario.addEventListener("click", entrar);
+
+
+
 
 
 

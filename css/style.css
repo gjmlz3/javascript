@@ -1,0 +1,66 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;1,300;1,500&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Open Sans", sans-serif;
+  
+}
+
+body {
+  background-color: white;
+  
+}
+
+.logo {
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+
+}
+
+.entrada {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+}
+.recetas {
+  width: 80%;
+  margin-top: 10%;
+  margin-bottom: 10%;  
+}
+.btn_usuario {
+  border-radius: 25%;
+  background-color: blueviolet;
+}
+
+/** Footer **/
+.iconClass {
+  color: black;
+  font-size: 1.5rem;
+  margin: 0.5rem;
+  justify-content: center;
+}
+
+footer {
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+
+footer a:link {
+  color: black;
+}
+
+footer a:hover {
+  color: black;
+}
+
+.bgNegro {
+  background-color: white;
+}
